@@ -7,7 +7,7 @@ die () {
     exit 1
 }
 
-[ "$#" -eq 1 ] || die "1 argument required, $# provided"
+[ "$#" -eq 1 ] || die "1 argument required (output directory), $# provided"
 
 killnmon() {
    ssh $DEPLOYER ssh $1 "'
