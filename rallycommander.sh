@@ -2,6 +2,7 @@
 WAIT_TIME=10
 DEPLOYER="root@169.53.176.174"
 
+#Kill the program if we dont have correct arguemnts
 die () {
     echo >&2 "$@"
     exit 1
@@ -9,12 +10,14 @@ die () {
 
 [ "$#" -eq 1 ] || die "1 argument required (output directory), $# provided"
 
+#Kill the nmon process
 killnmon() {
    ssh $DEPLOYER ssh $1 "'
        pgrep -f nmon | xargs kill -9
    '"
 }
 
+#Copy the nmon files
 copynmon(){
    ssh $DEPLOYER ssh $2 "'
        ls -t | grep .*nmon | head -n1 | xargs -r cat
