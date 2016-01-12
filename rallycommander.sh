@@ -11,12 +11,12 @@ die () {
 
 killnmon() {
    ssh $DEPLOYER ssh $1 "'
-   pgrep -f nmon | xargs kill -9
+       pgrep -f nmon | xargs kill -9
    '"
 }
 
 copynmon(){
-	ssh $DEPLOYER ssh $2 "'
+   ssh $DEPLOYER ssh $2 "'
        ls -t | grep .*nmon | head -n1 | xargs -r cat
     '" >> $1/$2.nmon
 }
