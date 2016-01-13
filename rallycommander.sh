@@ -1,7 +1,8 @@
 #!/bin/bash
 WAIT_TIME=10
 DEPLOYER="root@169.53.176.174"
-
+NMON_RUNTIME=300
+NMON_WINDOW=2
 #Kill the program if we dont have correct arguemnts
 die () {
     echo >&2 "$@"
@@ -25,8 +26,8 @@ copynmon(){
 }
 
 echo "Running nmon on controller1 and controller2"
-ssh $DEPLOYER ssh controller1 nmon -fT -s 30 -c 300
-ssh $DEPLOYER ssh controller2 -f nmon -fT -s 30 -c 300
+ssh $DEPLOYER ssh controller1 nmon -fT -s $NMON_WINDOW -c $NMON_RUNTIME
+ssh $DEPLOYER ssh controller2 -f nmon -fT -s $NMON_WINDOW -c $NMON_RUNTIME
 echo "nmon has been started. Delaying $WAIT_TIME seconds before rally tests"
 sleep $WAIT_TIME
 echo "Running rally tests"
