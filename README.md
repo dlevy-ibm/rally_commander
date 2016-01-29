@@ -11,3 +11,5 @@ How to run:
   http://matthiaslee.com/?q=node/38
 - Run the tool
   ./rallycommander output/folder
+
+ ./pyNmonAnalyzer.py -c -b -i location.of.nmon # need to automate this
