@@ -1,0 +1,27 @@
+VMTests.boot_ping_ssh_share_network:
+  -
+    args:
+      image:
+        name: "Ubuntu Server 14.04 LTS x86_64"
+      flavor:
+        name: m1.small
+      shared_network1:
+        name: Custom-Network1
+      force_delete: false
+      username: "ibmcloud"
+    runner:
+      type: constant
+      concurrency: 20
+      times: 500
+    context:
+      quotas:
+        neutron:
+          port: -1
+          floatingip: -1
+        nova:
+          instances: -1
+          cores: -1
+          ram: -1
+    sla:
+      failure_rate:
+        max: 0
