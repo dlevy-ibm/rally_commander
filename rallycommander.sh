@@ -66,13 +66,14 @@ do
     echo "--------------------------------------------"
     echo "--------------------------------------------"
 
-    echo "Running nmon and top on controller1 and controller2"
+    echo "Running nmon on controller1 and controller2 and compute $TARGET_COMPUTE"
     ssh $DEPLOYER ssh controller1 nmon -fT -s $NMON_WINDOW -c $NMON_RUNTIME -F /root/run$i.nmon
     ssh $DEPLOYER ssh controller2 nmon -fT -s $NMON_WINDOW -c $NMON_RUNTIME -F /root/run$i.nmon
     ssh $DEPLOYER ssh compute$TARGET_COMPUTE nmon -fT -s $NMON_WINDOW -c $NMON_RUNTIME -F /root/run$i.nmon
-    ssh $DEPLOYER -f -n ssh controller1 -f -n top -d 4 -b -o USER > $1/controller1.run$i.top
-    ssh $DEPLOYER -f -n ssh controller2 -f -n top -d 4 -b -o USER > $1/controller2.run$i.top
-    ssh $DEPLOYER -f -n ssh compute$TARGET_COMPUTE -f -n top -d 4 -b -o USER > $1/compute$TARGET_COMPUTE.run$i.top
+    echo "Running top on controller1 and controller2 and compute $TARGET_COMPUTE"
+    ssh $DEPLOYER -f -n ssh controller1 -f -n "top -d 4 -b -o USER | grep -ve root" > $1/controller1.run$i.top
+    ssh $DEPLOYER -f -n ssh controller2 -f -n "top -d 4 -b -o USER | grep -ve root" > $1/controller2.run$i.top
+    ssh $DEPLOYER -f -n ssh compute$TARGET_COMPUTE -f -n "top -d 4 -b -o USER | grep -ve root" > $1/compute$TARGET_COMPUTE.run$i.top
 
     echo "Sleep for 10 (s)"
     sleep 10
