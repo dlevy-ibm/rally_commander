@@ -49,8 +49,24 @@ rundistributionmonitor(){
 }
 
 
+killtestsuite(){
+    echo "Killing all test suite processes"
+    echo "Killing nmon"
+    killprocess controller1 nmon
+    killprocess controller2 nmon
+    killprocess compute$TARGET_COMPUTE nmon
+    echo "Killing top"
+    killprocess controller1 top
+    killprocess controller2 top
+    killprocess compute$TARGET_COMPUTE top
+    echo "Killing distmonitor"
+    killdeployprocess distmonitor
+}
+
 #Validate arguments
 [ "$#" -eq 1 ] || die "1 argument required (output directory), $# provided"
+
+killtestsuite
 
 #Copy rally test file
 scp ./boot-ping-ssh-vm-share-network.yaml $DEPLOYER:/root/rally-install/rally/samples/tasks/scenarios/vm/boot-ping-ssh-vm-share-network.yaml
@@ -82,16 +98,8 @@ do
     echo "Waiting $WAIT_TIME (s) before next test run..."
     sleep $WAIT_TIME
 
-    echo "Killing nmon"
-    killprocess controller1 nmon
-    killprocess controller2 nmon
-    killprocess compute$TARGET_COMPUTE nmon
-    echo "Killing top"
-    killprocess controller1 top
-    killprocess controller2 top
-    killprocess compute$TARGET_COMPUTE top
-    echo "Killing distmonitor"
-    killdeployprocess distmonitor
+    killtestsuite
+    
     echo "Copy over result files"
     copynmon $1 controller1 $i
     copynmon $1 controller2 $i
