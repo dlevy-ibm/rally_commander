@@ -1,11 +1,14 @@
 #!/bin/bash
-WAIT_TIME=150
+WAIT_TIME=20
 DEPLOYER="root@169.57.123.165"
 NMON_RUNTIME=30000
 NMON_WINDOW=2
 NUMBER_OF_RUNS=1
 TARGET_COMPUTE=4
-
+#CONCURRENCY=30
+#NUMVMS=1000
+#NUMNODES=30
+#DIRNAME=$NUMNODES"nodes_"$CONCURRENCY"conc_"$NUMVMS"VMS_"$(date "+%Y%m%d_%H%M%S")
 
 #Kill the program if we dont have correct arguemnts
 die () {
@@ -68,7 +71,6 @@ runrabbitmonitor(){
     ssh -f $DEPLOYER ssh -f $1 "'
        /root/rabbitmonitor.sh $1 $2
     '"
-    echo "DONE RUNNING RABBIT-----"
 }
 
 
@@ -120,13 +122,13 @@ do
     ssh $DEPLOYER -f -n ssh compute$TARGET_COMPUTE -f -n "top -d 4 -b -o USER | grep -ve root" > $1/compute$TARGET_COMPUTE.run$i.top
 
     echo "Running rabbit monitor on the master controller"
-    #runrabbitmonitor controller1 $i
+    runrabbitmonitor controller1 $i
     runrabbitmonitor controller2 $i
 
     echo "Sleep for 10 (s)"
     sleep 10
     rundistributionmonitor $i
-    runfdbmonitor $i
+    #runfdbmonitor $i
     runrally $i $1
     echo "Waiting $WAIT_TIME (s) before next test run..."
     sleep $WAIT_TIME
@@ -136,6 +138,7 @@ do
     echo "Copy over result files"
     copynmon $1 controller1 $i
     copynmon $1 controller2 $i
+    copyrabbit $1 controller1 $i
     copyrabbit $1 controller2 $i
     copynmon $1 compute$TARGET_COMPUTE $i
     scp $DEPLOYER:/root/distmonitor$i.txt $1/distmonitor$i.txt

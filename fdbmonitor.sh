@@ -13,7 +13,11 @@ do
     fdboutput controller1
     fdboutput controller2
     fdboutput compute17
-    fdboutput compute57
+    fdboutput compute54
+    fdboutput compute40
+    fdboutput compute51
+    fdboutput compute9
+    #fdboutput compute57
     echo "------" >> $FILE
     echo "" >> $FILE
     sleep 4

@@ -12,7 +12,7 @@ VMTests.boot_ping_ssh_share_network:
     runner:
       type: constant
       concurrency: 20
-      times: 700
+      times: 1000
     context:
       quotas:
         neutron:
